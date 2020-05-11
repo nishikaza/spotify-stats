@@ -1,21 +1,44 @@
-import React from "react"
-import { Link } from "gatsby"
+import React, { Component } from "react"
+import * as spotifyWebAPI from "spotify-web-api-node"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { Button } from "react-bootstrap"
+import LandingPage from "./landingPage"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+export const authEndpoint = "https://accounts.spotify.com/authorize"
+// Replace with your app's client ID, redirect URI and desired scopes
+const clientId = "a4251ec3a1024ca3b68f59efdc66b362"
+const redirectUri = "http://localhost:8000/callback/"
+const scopes = ["user-read-currently-playing", "user-read-playback-state"]
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+class Index extends Component {
+  constructor() {
+    super()
+    this.state = { loggedIn: false }
+    if (this.state.loggedIn) {
+      const spotifyApi = new spotifyWebAPI()
+      const parameters = this.getHashParams()
+      if (parameters) {
+        spotifyApi.setAccessToken(parameters.access_token)
+        console.log(spotifyApi.getMyTopTracks({ time_range: "long_term" }))
+      }
+    }
+  }
 
-export default IndexPage
+  getHashParams() {
+    var hashParams = {}
+    var e,
+      r = /([^&;=]+)=?([^&;]*)/g,
+      q = window.location.hash.substring(1)
+    while ((e = r.exec(q))) {
+      hashParams[e[1]] = decodeURIComponent(e[2])
+    }
+    return hashParams
+  }
+  landingPageOnClick() {}
+
+  render() {
+    return <div>{!this.state.loggedIn && <LandingPage />}</div>
+  }
+}
+
+export default Index
