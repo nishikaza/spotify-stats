@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import * as spotifyWebAPI from "spotify-web-api-node"
 import "bootstrap/dist/css/bootstrap.min.css"
 import LandingPage from "./landingPage"
+import TopSongs from "./topSongs"
 
 class Index extends Component {
   constructor() {
@@ -12,7 +13,7 @@ class Index extends Component {
     const parameters = this.getHashParams()
     const access_token = parameters.access_token
     if (access_token) {
-      this.state = { loggedIn: true }
+      this.state = { loggedIn: true, access_token, spotifyApi }
       spotifyApi.setAccessToken(access_token)
       console.log(spotifyApi.getMyTopTracks({ time_range: "long_term" }))
     }
@@ -31,7 +32,6 @@ class Index extends Component {
 
   landingPageOnClick() {
     // Get the hash of the url
-    console.log("test")
     const hash = window.location.hash
       .substring(1)
       .split("&")
@@ -67,6 +67,12 @@ class Index extends Component {
           <LandingPage
             onClick={this.landingPageOnClick}
             loggedIn={this.state.loggedIn}
+          />
+        )}
+        {this.state.loggedIn && (
+          <TopSongs
+            spotifyApi={this.state.spotifyApi}
+            access_token={this.state.access_token}
           />
         )}
       </div>

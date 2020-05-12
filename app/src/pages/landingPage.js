@@ -6,7 +6,9 @@ class LandingPage extends Component {
     return (
       <div>
         {!this.props.loggedIn && (
-          <Button onClick={this.props.onClick}>Log in to Spotify</Button>
+          <Button variant="success" onClick={this.props.onClick}>
+            Log in to Spotify
+          </Button>
         )}
       </div>
     )
