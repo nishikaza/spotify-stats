@@ -48,7 +48,6 @@ class TopSongs extends Component {
     this.getSpotifyData()
   }
   render() {
-    console.log(this.state)
     return (
       <div>
         <h1>My top songs:</h1>
@@ -56,26 +55,18 @@ class TopSongs extends Component {
           <Tab eventKey="lastMonth" title="Last Month">
             {this.state.topSongsLastMonthReady &&
               this.state.topSongsLastMonth.map(song => (
-                <div>
-                  <Song songInfo={song} />
-                </div>
+                <Song songInfo={song} />
               ))}
           </Tab>
           <Tab eventKey="lastSixMonths" title="Last Six Months">
             {this.state.topSongsLastSixMonthsReady &&
               this.state.topSongsLastSixMonths.map(song => (
-                <div>
-                  <Song songInfo={song} />
-                </div>
+                <Song songInfo={song} />
               ))}
           </Tab>
           <Tab eventKey="allTime" title="All Time">
             {this.state.topSongsAllTimeReady &&
-              this.state.topSongsAllTime.map(song => (
-                <div>
-                  <Song songInfo={song} />
-                </div>
-              ))}
+              this.state.topSongsAllTime.map(song => <Song songInfo={song} />)}
           </Tab>
         </Tabs>
       </div>
