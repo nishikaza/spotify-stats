@@ -2,11 +2,12 @@ import React, { Component } from "react"
 import { Button } from "react-bootstrap"
 
 class LandingPage extends Component {
-  state = {}
   render() {
     return (
       <div>
-        <Button>Authentication</Button>
+        {!this.props.loggedIn && (
+          <Button onClick={this.props.onClick}>Log in to Spotify</Button>
+        )}
       </div>
     )
   }

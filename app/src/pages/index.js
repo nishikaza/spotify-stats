@@ -1,26 +1,20 @@
 import React, { Component } from "react"
 import * as spotifyWebAPI from "spotify-web-api-node"
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Button } from "react-bootstrap"
 import LandingPage from "./landingPage"
-
-export const authEndpoint = "https://accounts.spotify.com/authorize"
-// Replace with your app's client ID, redirect URI and desired scopes
-const clientId = "a4251ec3a1024ca3b68f59efdc66b362"
-const redirectUri = "http://localhost:8000/callback/"
-const scopes = ["user-read-currently-playing", "user-read-playback-state"]
 
 class Index extends Component {
   constructor() {
     super()
+    this.landingPageOnClick = this.landingPageOnClick.bind(this)
     this.state = { loggedIn: false }
-    if (this.state.loggedIn) {
-      const spotifyApi = new spotifyWebAPI()
-      const parameters = this.getHashParams()
-      if (parameters) {
-        spotifyApi.setAccessToken(parameters.access_token)
-        console.log(spotifyApi.getMyTopTracks({ time_range: "long_term" }))
-      }
+    const spotifyApi = new spotifyWebAPI()
+    const parameters = this.getHashParams()
+    const access_token = parameters.access_token
+    if (access_token) {
+      this.state = { loggedIn: true }
+      spotifyApi.setAccessToken(access_token)
+      console.log(spotifyApi.getMyTopTracks({ time_range: "long_term" }))
     }
   }
 
@@ -34,10 +28,49 @@ class Index extends Component {
     }
     return hashParams
   }
-  landingPageOnClick() {}
+
+  landingPageOnClick() {
+    // Get the hash of the url
+    console.log("test")
+    const hash = window.location.hash
+      .substring(1)
+      .split("&")
+      .reduce(function (initial, item) {
+        if (item) {
+          var parts = item.split("=")
+          initial[parts[0]] = decodeURIComponent(parts[1])
+        }
+        return initial
+      }, {})
+    window.location.hash = ""
+
+    let access_token = hash.access_token
+    const authEndpoint = "https://accounts.spotify.com/authorize"
+
+    const clientId = "a4251ec3a1024ca3b68f59efdc66b362"
+    const redirectUri = "http://localhost:8000/"
+    const scopes = ["user-read-playback-state"]
+
+    // If there is no token, redirect to Spotify authorization
+    if (!access_token) {
+      window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+        "%20"
+      )}&response_type=token`
+    }
+    this.setState({ loggedIn: true })
+  }
 
   render() {
-    return <div>{!this.state.loggedIn && <LandingPage />}</div>
+    return (
+      <div>
+        {!this.state.loggedIn && (
+          <LandingPage
+            onClick={this.landingPageOnClick}
+            loggedIn={this.state.loggedIn}
+          />
+        )}
+      </div>
+    )
   }
 }
 
