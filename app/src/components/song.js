@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Media } from "react-bootstrap"
+import { Media, Card } from "react-bootstrap"
 
 class Song extends Component {
   constructor(props) {
