@@ -40,13 +40,13 @@ class StatsPane extends Component {
       >
         <Container>
           <Row>
-            <Col>
+            {/* <Col>
               <img
                 src={this.state.profilePictureURL}
                 width="100"
                 height="100"
               />
-            </Col>
+            </Col> */}
             <Col>
               <h2>{"Hello, " + this.state.name}</h2>
             </Col>

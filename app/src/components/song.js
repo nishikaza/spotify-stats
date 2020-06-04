@@ -29,7 +29,7 @@ class Song extends Component {
           alt="Album art"
         />
         <Media.Body>
-          <h5>{this.state.title}</h5>
+          <h5>{this.props.id + ". " + this.state.title}</h5>
           <p>{this.state.artist}</p>
         </Media.Body>
       </Media>

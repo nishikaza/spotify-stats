@@ -56,7 +56,12 @@ class Index extends Component {
 
     const clientId = "a4251ec3a1024ca3b68f59efdc66b362"
     const redirectUri = "http://localhost:8000/"
-    const scopes = ["user-top-read", "user-read-recently-played"]
+    const scopes = [
+      "user-top-read",
+      "user-read-recently-played",
+      "user-read-private",
+      "playlist-modify-private",
+    ]
 
     // If there is no token, redirect to Spotify authorization
     if (!access_token) {

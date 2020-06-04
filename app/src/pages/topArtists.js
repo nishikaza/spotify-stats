@@ -1,6 +1,6 @@
 import React, { Component } from "react"
-import { Card } from "react-bootstrap"
-
+import { Tabs, Tab, Container, Row } from "react-bootstrap"
+import Artist from "../components/artist"
 class TopArtists extends Component {
   constructor(props) {
     super(props)
@@ -17,7 +17,7 @@ class TopArtists extends Component {
   getSpotifyData() {
     var scope = this
     this.props.spotifyApi
-      .getMyTopArtists({ time_range: "long_term" })
+      .getMyTopArtists({ time_range: "long_term", limit: 50 })
       .then(value =>
         Promise.resolve(value).then(data =>
           scope.setState({
@@ -28,7 +28,7 @@ class TopArtists extends Component {
       .then(scope.setState({ topArtistsAllTimeReady: true }))
 
     this.props.spotifyApi
-      .getMyTopArtists({ time_range: "medium_term" })
+      .getMyTopArtists({ time_range: "medium_term", limit: 50 })
       .then(value => Promise.resolve(value))
       .then(data => {
         scope.setState({
@@ -37,27 +37,66 @@ class TopArtists extends Component {
       })
       .then(scope.setState({ topArtistsLastSixMonthsReady: true }))
     this.props.spotifyApi
-      .getMyTopArtists({ time_range: "short_term" })
+      .getMyTopArtists({ time_range: "short_term", limit: 50 })
       .then(value => Promise.resolve(value))
       .then(data => scope.setState({ topArtistsLastMonth: data.body.items }))
       .then(scope.setState({ topArtistsLastMonthReady: true }))
   }
   componentDidMount() {
     this.getSpotifyData()
+    console.log(this.state)
   }
   render() {
+    var lastMonthCount = 0
+    var lastSixMonthsCount = 0
+    var allTimeCount = 0
     return (
       <div>
         <h1>My top artists:</h1>
-        <Card>
-          <Card.Img variant="top" src="holder.js/100px180" />
-          <Card.Body>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
-          </Card.Body>
-        </Card>
+        <Tabs>
+          <Tab eventKey="lastMonth" title="Last Month">
+            <Container>
+              <Row>
+                {this.state.topArtistsLastMonthReady &&
+                  this.state.topArtistsLastMonth.map(artist => (
+                    <Artist
+                      id={++lastMonthCount}
+                      key={lastMonthCount}
+                      artistInfo={artist}
+                    />
+                  ))}
+              </Row>
+            </Container>
+          </Tab>
+          <Tab eventKey="lastSixMonths" title="Last Six Months">
+            <Container>
+              <Row>
+                {this.state.topArtistsLastSixMonthsReady &&
+                  this.state.topArtistsLastSixMonths.map(artist => (
+                    <Artist
+                      id={++lastSixMonthsCount}
+                      key={lastSixMonthsCount}
+                      artistInfo={artist}
+                    />
+                  ))}
+              </Row>
+            </Container>
+          </Tab>
+          <Tab eventKey="allTime" title="All Time">
+            <Container>
+              <Row>
+                {this.state.topArtistsAllTimeReady &&
+                  this.state.topArtistsAllTime.map(artist => (
+                    <Artist
+                      id={++allTimeCount}
+                      key={allTimeCount}
+                      artistInfo={artist}
+                    />
+                  ))}
+              </Row>
+            </Container>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
