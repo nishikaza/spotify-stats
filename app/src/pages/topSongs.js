@@ -13,7 +13,6 @@ class TopSongs extends Component {
       topSongsLastSixMonths: [],
       topSongsLastMonth: [],
     }
-    console.log(this.state)
   }
 
   getSpotifyData() {
@@ -53,20 +52,33 @@ class TopSongs extends Component {
         <h1>My top songs:</h1>
         <Tabs>
           <Tab eventKey="lastMonth" title="Last Month">
-            {this.state.topSongsLastMonthReady &&
-              this.state.topSongsLastMonth.map(song => (
-                <Song songInfo={song} />
-              ))}
+            {/* <CardGroup> */}
+            {/* <CardDeck style={this.cardDeckStyle}> */}
+            <ul className="list-unstyled">
+              {this.state.topSongsLastMonthReady &&
+                this.state.topSongsLastMonth.map(song => (
+                  <Song songInfo={song} />
+                ))}
+            </ul>
+            {/* </CardGroup> */}
+
+            {/* </CardDeck> */}
           </Tab>
           <Tab eventKey="lastSixMonths" title="Last Six Months">
-            {this.state.topSongsLastSixMonthsReady &&
-              this.state.topSongsLastSixMonths.map(song => (
-                <Song songInfo={song} />
-              ))}
+            <ul className="list-unstyled">
+              {this.state.topSongsLastSixMonthsReady &&
+                this.state.topSongsLastSixMonths.map(song => (
+                  <Song songInfo={song} />
+                ))}
+            </ul>
           </Tab>
           <Tab eventKey="allTime" title="All Time">
-            {this.state.topSongsAllTimeReady &&
-              this.state.topSongsAllTime.map(song => <Song songInfo={song} />)}
+            <ul className="list-unstyled">
+              {this.state.topSongsAllTimeReady &&
+                this.state.topSongsAllTime.map(song => (
+                  <Song songInfo={song} />
+                ))}
+            </ul>
           </Tab>
         </Tabs>
       </div>

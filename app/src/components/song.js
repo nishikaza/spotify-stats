@@ -1,29 +1,36 @@
 import React, { Component } from "react"
-import { Media, Card } from "react-bootstrap"
+import { Media } from "react-bootstrap"
 
 class Song extends Component {
   constructor(props) {
     super(props)
+    this.songOnClick = this.songOnClick.bind(this)
     const metadata = this.props.songInfo
-    console.log(metadata)
     this.state = {
-      albumArt: metadata.album.images[2].url,
+      albumArt: metadata.album.images[1].url,
       title: metadata.name,
       artist: metadata.album.artists[0].name,
+      link: metadata.external_urls.spotify,
     }
   }
+
+  songOnClick() {
+    window.open(this.state.link, "_blank")
+  }
+
   render() {
     return (
-      <Media>
+      <Media style={{ cursor: "pointer" }} onClick={this.songOnClick}>
         <img
           width={64}
           height={64}
           className="mr-3"
           src={this.state.albumArt}
+          alt="Album art"
         />
         <Media.Body>
           <h5>{this.state.title}</h5>
-          <h6>{this.state.artist}</h6>
+          <p>{this.state.artist}</p>
         </Media.Body>
       </Media>
     )

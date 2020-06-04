@@ -2,13 +2,15 @@ import React, { Component } from "react"
 import * as spotifyWebAPI from "spotify-web-api-node"
 import "bootstrap/dist/css/bootstrap.min.css"
 import LandingPage from "./landingPage"
-import TopSongs from "./topSongs"
+import ViewPane from "./viewPane"
+import Header from "../components/header"
 
 class Index extends Component {
   constructor() {
     super()
     this.landingPageOnClick = this.landingPageOnClick.bind(this)
-    this.state = { loggedIn: false }
+    this.navLinkOnClick = this.navLinkOnClick.bind(this)
+    this.state = { loggedIn: false, activePage: "home" }
     const spotifyApi = new spotifyWebAPI()
     const parameters = this.getHashParams()
     const access_token = parameters.access_token
@@ -30,6 +32,11 @@ class Index extends Component {
     return hashParams
   }
 
+  navLinkOnClick(id) {
+    console.log(id)
+    this.setState({ activePage: id })
+  }
+
   landingPageOnClick() {
     // Get the hash of the url
     const hash = window.location.hash
@@ -49,7 +56,7 @@ class Index extends Component {
 
     const clientId = "a4251ec3a1024ca3b68f59efdc66b362"
     const redirectUri = "http://localhost:8000/"
-    const scopes = ["user-top-read"]
+    const scopes = ["user-top-read", "user-read-recently-played"]
 
     // If there is no token, redirect to Spotify authorization
     if (!access_token) {
@@ -70,10 +77,14 @@ class Index extends Component {
           />
         )}
         {this.state.loggedIn && (
-          <TopSongs
-            spotifyApi={this.state.spotifyApi}
-            access_token={this.state.access_token}
-          />
+          <div>
+            <Header linkOnClick={this.navLinkOnClick} />
+            <ViewPane
+              activePage={this.state.activePage}
+              spotifyApi={this.state.spotifyApi}
+              access_token={this.state.access_token}
+            />
+          </div>
         )}
       </div>
     )

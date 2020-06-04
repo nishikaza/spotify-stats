@@ -18,7 +18,7 @@ class LandingPage extends Component {
     return (
       <div style={fullPageStyle}>
         {!this.props.loggedIn && (
-          <div class="row justify-content-center align-self-center">
+          <div className="row justify-content-center align-self-center">
             {/* <h1>Log in below to view your spotify listening stats.</h1> */}
             <Button variant="success" onClick={this.props.onClick}>
               Authenticate Spotify
